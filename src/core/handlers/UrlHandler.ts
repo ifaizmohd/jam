@@ -1,4 +1,5 @@
 import { InvalidUrlError } from "../../error/InvalidUrlError";
+import { IUrlHandler } from "../../types/handlers/UrlHandler.types";
 import {
   Encryptor,
   QueryParams,
@@ -17,7 +18,7 @@ import { BasicUrlParser } from "../urlParser/BasicUrlParser";
  * // With custom parser and encryption
  * const secureHandler = new UrlHandler(new AdvancedParser(), new AESEncryptor());
  */
-export class UrlHandler {
+export class UrlHandler implements IUrlHandler {
   private parser: UrlParser;
   private encryptor?: Encryptor;
 
@@ -48,10 +49,14 @@ export class UrlHandler {
    * // With query parameters
    * handler.parse('https://example.com', undefined, { page: '2', sort: 'desc' });
    */
-  public parse(url: string, base?: string, queryParams?: QueryParams): URL {
+  public parse(
+    endpoint: string,
+    baseUrl?: string,
+    queryParams?: QueryParams
+  ): URL {
     try {
       // Core parsing delegation to strategy implementation
-      const urlObject = this.parser.parse(url, base);
+      const urlObject = this.parser.parse(endpoint, baseUrl);
       // Apply query parameters if provided
       if (queryParams) {
         urlObject.search = this.buildQueryString(queryParams);
