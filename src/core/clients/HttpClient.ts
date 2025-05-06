@@ -1,4 +1,5 @@
 import { IHTTPClient } from "../../types/clients/httpClient.types";
+import { IAPIResponse } from "../../types/handlers/ResponseHandler.types";
 import { request } from "../handlers/RequestHandler";
 
 /**
@@ -25,7 +26,10 @@ export class HTTPClient implements IHTTPClient {
    *   headers: { 'Accept': 'application/json' }
    * });
    */
-  public async get(endpoint: string, options: RequestInit): Promise<Response> {
+  public async get<T>(
+    endpoint: string,
+    options: RequestInit
+  ): Promise<IAPIResponse<T>> {
     return await request(endpoint, "GET", options);
   }
 
@@ -40,11 +44,11 @@ export class HTTPClient implements IHTTPClient {
    * - Content-Type header defaults to 'application/json' if not provided
    * - Body will be stringified if object provided
    */
-  public async post(
+  public async post<T>(
     endpoint: string,
     options: RequestInit,
     body?: any
-  ): Promise<Response> {
+  ): Promise<IAPIResponse<T>> {
     return await request(endpoint, "POST", options, body);
   }
 
@@ -58,11 +62,11 @@ export class HTTPClient implements IHTTPClient {
    * @remarks
    * Suitable for full resource updates
    */
-  public async put(
+  public async put<T>(
     endpoint: string,
     options: RequestInit,
     body?: any
-  ): Promise<Response> {
+  ): Promise<IAPIResponse<T>> {
     return await request(endpoint, "PUT", options, body);
   }
 
@@ -75,10 +79,10 @@ export class HTTPClient implements IHTTPClient {
    * @example
    * await client.delete('/users/123');
    */
-  public async delete(
+  public async delete<T>(
     endpoint: string,
     options: RequestInit
-  ): Promise<Response> {
+  ): Promise<IAPIResponse<T>> {
     return await request(endpoint, "DELETE", options);
   }
 
@@ -92,11 +96,11 @@ export class HTTPClient implements IHTTPClient {
    * @remarks
    * Suitable for partial resource updates
    */
-  public async patch(
+  public async patch<T>(
     endpoint: string,
     options: RequestInit,
     body?: any
-  ): Promise<Response> {
+  ): Promise<IAPIResponse<T>> {
     return await request(endpoint, "PATCH", options, body);
   }
 }
