@@ -1,5 +1,7 @@
 import { HttpError } from "../../error/HttpError";
 import { HttpMethods } from "../../types/clients/httpClient.types";
+import { IAPIResponse } from "../../types/handlers/ResponseHandler.types";
+import { ResponseHandler } from "./ResponseHandler";
 
 /**
  * Attempts to parse error information from HTTP responses
@@ -67,22 +69,11 @@ export async function request<T>(
   method: HttpMethods,
   options: RequestInit,
   body?: any
-): Promise<T> {
+): Promise<IAPIResponse<T>> {
   try {
     const parsedOptions = parseOptions(method, body, options);
     const response = await fetch(endpoint, parsedOptions);
-
-    if (!response.ok) {
-      const errorData = await parseError(response);
-      throw new HttpError(
-        response.status,
-        `HTTP Error ${response.status}`,
-        errorData
-      );
-    }
-    /* Dev Note: Direct JSON parsing assumes all successful responses
-     * are JSON. Consider content-type negotiation for other formats */
-    return (await response.json()) as T;
+    return ResponseHandler(response);
   } catch (error) {
     if (error instanceof HttpError) throw error;
     // Network errors (DNS, CORS, offline, etc)
