@@ -122,7 +122,7 @@ export class HeaderFactory {
    * - Regex: /^[a-zA-Z0-9!#$%&'*+-.^_`|~]+$/
    */
   private isValidHeaderNames(headers: Headers): boolean {
-    const headerNames = Array.from(headers.keys());
+    const headerNames = Array.from(Object.keys(headers));
     return headerNames.every((name) =>
       /^[a-zA-Z0-9!#$%&'*+-.^_`|~]+$/.test(name)
     );

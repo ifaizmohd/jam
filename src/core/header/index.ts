@@ -2,4 +2,5 @@ import { HeaderFactory } from "./HeaderFactory";
 
 const headerFactory = new HeaderFactory();
 
-export default headerFactory;
+export { headerFactory };
+export { HeaderPresets } from "./HeaderPresets";
