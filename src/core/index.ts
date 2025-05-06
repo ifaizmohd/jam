@@ -1,9 +1,10 @@
 import { ApiErrorHandler } from "../error/ApiError";
 import { HttpMethods } from "../types/clients/httpClient.types";
 import { Url } from "../types/index.types";
-import headerFactory from "./header";
+import { headerFactory } from "./header";
 import { HeaderPresets } from "./header/HeaderPresets";
-import UrlParser from "./urlParser";
+import { urlParser } from "./urlParser";
+import { ImportApiFunction } from "../utils/apiFunction.utils";
 
 const errorHandler = new ApiErrorHandler();
 
@@ -13,13 +14,15 @@ export async function constructApi(
   header?: Headers,
   method?: HttpMethods
 ) {
-  if (method) {
-    const apiFunction = await import(
-      `../core/HttpMethods/${method.trim().toLocaleLowerCase()}`
-    );
-    return apiFunction.default(url, { ...payload, ...header });
+  try {
+    if (method) {
+      const apiFunction = await ImportApiFunction(method.toLowerCase());
+      return apiFunction.default(url, { ...payload, ...header });
+    }
+    throw errorHandler.handle("Please provide the HTTP Method");
+  } catch (e) {
+    throw errorHandler.handle("Error occurred in construct API method:: " + e);
   }
-  throw errorHandler.handle("Please provide the HTTP Method");
 }
 
 export async function constructHeaders(
@@ -43,7 +46,7 @@ export async function constructUrl(
   method?: HttpMethods
 ) {
   return await constructHeaders(
-    UrlParser.parse(url.endpoint, url.baseUrl, url.queryParams),
+    urlParser.parse(url.endpoint, url.baseUrl, url.queryParams),
     payload,
     headers,
     method
