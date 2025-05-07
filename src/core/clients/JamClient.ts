@@ -4,7 +4,7 @@ import {
   IJamClientConfigurations,
 } from "../../types/clients/JamClient.types";
 import { QueryParams } from "../../types/urlParser/urlParser.types";
-import { constructUrl } from "..";
+import { constructUrl } from "../apiConstructor";
 
 /**
  * Core client for interacting with Jam API services
@@ -32,6 +32,7 @@ export class JamClient implements IJamClient {
    */
   constructor(baseUrl?: string) {
     this.baseUrl = baseUrl;
+    this.headers = {};
   }
 
   /**
@@ -97,10 +98,7 @@ export class JamClient implements IJamClient {
     if (!this.accessToken) {
       throw new Error("Access token must be set before setting auth headers");
     }
-    this.headers = {
-      ...this.headers,
-      [header]: this.accessToken,
-    };
+    this.headers = { ...this.headers, Authorization: header };
   }
 
   /**
