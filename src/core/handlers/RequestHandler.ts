@@ -41,13 +41,11 @@ export async function parseError(response: Response): Promise<any> {
  */
 export function parseOptions(
   method: HttpMethods,
-  body: any,
   options: RequestInit
 ): RequestInit {
   const processedOptions: RequestInit = {
     ...options,
     method,
-    body,
   };
   return processedOptions;
 }
@@ -67,11 +65,10 @@ export function parseOptions(
 export async function request<T>(
   endpoint: string,
   method: HttpMethods,
-  options: RequestInit,
-  body?: any
+  options: RequestInit
 ): Promise<IAPIResponse<T>> {
   try {
-    const parsedOptions = parseOptions(method, body, options);
+    const parsedOptions = parseOptions(method, options);
     const response = await fetch(endpoint, parsedOptions);
     return ResponseHandler(response);
   } catch (error) {

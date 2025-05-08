@@ -10,6 +10,7 @@ import { headerFactory } from "../header";
 import { HeaderPresets } from "../header/HeaderPresets";
 import { urlParser } from "../urlParser";
 import { ImportApiFunction } from "../../utils/apiFunction.utils";
+import { isEmpty } from "lodash";
 
 const errorHandler = new ApiErrorHandler();
 
@@ -33,7 +34,7 @@ const errorHandler = new ApiErrorHandler();
  */
 export async function constructApi(
   url: URL,
-  payload?: any,
+  payload?: string,
   header?: Headers,
   method?: HttpMethods
 ): Promise<any> {
@@ -50,6 +51,54 @@ export async function constructApi(
   } catch (e) {
     throw errorHandler.handle("Error occurred in construct API method:: " + e);
   }
+}
+
+/**
+ * Constructs an API request with proper payload handling.
+ * Automatically stringifies JSON payloads and delegates to the core API constructor.
+ *
+ * @async
+ * @function constructPayload
+ * @param {URL} url - The fully constructed URL object for the request
+ * @param {*} [payload] - The request payload to be sent (optional)
+ * @param {Headers} [headers] - Headers to include with the request (optional)
+ * @param {HttpMethods} [method] - HTTP method (GET, POST, PUT, etc.) (optional)
+ * @returns {Promise<any>} The response from the API call
+ *
+ * @note This function automatically handles JSON payload serialization
+ * @warning Non-empty payloads will be forcefully stringified to JSON
+ * @see {@link constructApi} for the underlying API implementation
+ * @see {@link constructHeaders} for higher-level header handling
+ *
+ * @example
+ * // With payload (automatically stringified)
+ * const response = await constructPayload(
+ *   new URL('https://api.example.com/users'),
+ *   { name: 'John', age: 30 },
+ *   new Headers(),
+ *   'POST'
+ * );
+ *
+ * @example
+ * // Without payload (passthrough)
+ * const response = await constructPayload(
+ *   new URL('https://api.example.com/users/123'),
+ *   undefined,
+ *   new Headers(),
+ *   'GET'
+ * );
+ */
+export async function constructPayload(
+  url: URL,
+  payload?: any,
+  headers?: Headers,
+  method?: HttpMethods
+): Promise<any> {
+  if (!isEmpty(payload) && typeof payload !== "string") {
+    const body = JSON.stringify(payload);
+    return constructApi(url, body, headers, method);
+  }
+  return constructApi(url, payload, headers, method);
 }
 
 /**
@@ -75,7 +124,7 @@ export async function constructHeaders(
   headers?: Record<string, string>,
   method?: HttpMethods
 ) {
-  return await constructApi(
+  return await constructPayload(
     url,
     payload,
     headerFactory.create({ ...HeaderPresets.json(), ...headers }),

@@ -46,10 +46,9 @@ export class HTTPClient implements IHTTPClient {
    */
   public async post<T>(
     endpoint: string,
-    options: RequestInit,
-    body?: any
+    options: RequestInit
   ): Promise<IAPIResponse<T>> {
-    return await request(endpoint, "POST", options, body);
+    return await request(endpoint, "POST", options);
   }
 
   /**
@@ -64,10 +63,9 @@ export class HTTPClient implements IHTTPClient {
    */
   public async put<T>(
     endpoint: string,
-    options: RequestInit,
-    body?: any
+    options: RequestInit
   ): Promise<IAPIResponse<T>> {
-    return await request(endpoint, "PUT", options, body);
+    return await request(endpoint, "PUT", options);
   }
 
   /**
@@ -98,9 +96,8 @@ export class HTTPClient implements IHTTPClient {
    */
   public async patch<T>(
     endpoint: string,
-    options: RequestInit,
-    body?: any
+    options: RequestInit
   ): Promise<IAPIResponse<T>> {
-    return await request(endpoint, "PATCH", options, body);
+    return await request(endpoint, "PATCH", options);
   }
 }
