@@ -28,7 +28,7 @@ It accepts baseURL, which will be using in all requests.
 
 Jam class gives access to different HTTP methods which can be used to make API calls.
 
-1. # Get
+# 1. Get
 
 Execute GET request, returns a Promise
 
@@ -41,7 +41,9 @@ get method accepts 3 parameters, out of which one is mandatory, which is url or 
 ---
 
 | url | string | No
+
 | payload | any | Yes
+
 | queryParams | Object | Yes
 
 Get request with payload and query params would looks like -
