@@ -12,40 +12,198 @@ JAM is build to make cross platform api requests from Browsers, NodeJs servers a
 2. Browser support
 3. Same API across platforms
 
-# Get Started
-
 ## Installation
 
 `npm install jam`
 
-# Basic Usage
+## Quick Start
 
-Create a new Jam client for your application to make API calls.
+```typescript
+import { Jam } from "@jam/api-client";
 
-`const client = new Jam('https://api.jam.com');`
+// Initialize client
+const client = new Jam("https://api.jam.com/v2");
 
-It accepts baseURL, which will be using in all requests.
+// Configure authentication
+client.setAccessToken("your-api-token-here");
+client.setAuthHeaders("Authorization");
 
-Jam class gives access to different HTTP methods which can be used to make API calls.
+// Make API requests
+const response = await client.get("/users/me");
+```
 
-# 1. Get
+## API Reference
 
-Execute GET request, returns a Promise
+### Initialization
 
-`client.get('/examplePath')`
+#### `new Jam(baseUrl?: string)`
 
-get method accepts 3 parameters, out of which one is mandatory, which is url or path, and other two are optional.
+Creates a new Jam API client instance.
 
-| Param | type | optional
+**Parameters:**
 
----
+- `baseUrl` (optional): Base URL for all API requests (e.g., `'https://api.jam.com/v2'`)
 
-| url | string | No
+**Example:**
 
-| payload | any | Yes
+```typescript
+const client = new Jam(process.env.JAM_API_URL);
+```
 
-| queryParams | Object | Yes
+### Configuration Methods
 
-Get request with payload and query params would looks like -
+#### `configure(options: IJamClientConfigurations): void`
 
-`client.get('/examplePath', {test: 'test'}, {page: 1})`
+Configure multiple client options at once.
+
+**Parameters:**
+
+- `options`: Configuration object with optional properties:
+  - `baseUrl`: Base API URL
+  - `accessToken`: Authentication token
+
+**Example:**
+
+```typescript
+client.configure({
+  baseUrl: "https://api.jam.com/v2",
+  accessToken: "eyJhbGci...",
+});
+```
+
+#### `setAccessToken(token: string): void`
+
+Set the authentication token for API requests.
+
+**Parameters:**
+
+- `token`: Bearer token or API key
+
+#### `setBaseUrl(baseUrl: string): void`
+
+Update the base URL for API endpoints.
+
+**Parameters:**
+
+- `baseUrl`: New base URL (must be valid URL format)
+
+**Throws:**
+
+- `Error` if invalid URL format provided
+
+#### `setHeaders(headers: Record<string, string>): void`
+
+Merge custom headers with existing configuration.
+
+**Parameters:**
+
+- `headers`: Header key/value pairs
+
+**Example:**
+
+```typescript
+client.setHeaders({
+  "X-Custom-Header": "value",
+  Accept: "application/json",
+});
+```
+
+#### `setAuthHeaders(header: string): void`
+
+Set authentication header using stored access token.
+
+**Parameters:**
+
+- `header`: Header name to use for authentication (e.g., `'Authorization'`)
+
+**Throws:**
+
+- `Error` if access token not configured
+
+### HTTP Methods
+
+All HTTP methods follow a similar pattern:
+
+```typescript
+client.[method](url, payload?, queryParams?): Promise<Response>
+```
+
+#### Available Methods:
+
+- `get(url, payload?, queryParams?)`
+- `post(url, payload?, queryParams?)`
+- `put(url, payload, queryParams?)`
+- `delete(url, queryParams?, payload?)`
+- `patch(url, payload?, queryParams?)`
+
+**Parameters:**
+
+- `url`: API endpoint path (e.g., `'/users'`)
+- `payload` (optional): Request body (not used for GET requests)
+- `queryParams` (optional): URL query parameters as key/value pairs
+
+**Returns:**
+
+- `Promise<Response>` (PUT, DELETE, PATCH)
+- `Promise<void>` (GET, POST)
+
+**Throws:**
+
+- `HttpError` or `ApiError` on request failure
+
+**Examples:**
+
+```typescript
+// GET request with query params
+const users = await client.get("/users", null, { active: "true" });
+
+// POST request with payload
+const newUser = await client.post("/users", {
+  name: "John Doe",
+  email: "john@example.com",
+});
+
+// DELETE request
+await client.delete("/users/123");
+```
+
+## Error Handling
+
+The client throws the following error types:
+
+- `HttpError`: For HTTP request failures (GET/POST)
+- `ApiError`: For API-level errors (PUT/DELETE/PATCH)
+- `Error`: For configuration errors
+
+Handle errors with try/catch:
+
+```typescript
+try {
+  await client.get("/protected-resource");
+} catch (error) {
+  if (error instanceof HttpError) {
+    console.error("HTTP Error:", error.statusCode);
+  } else {
+    console.error("Unexpected error:", error);
+  }
+}
+```
+
+## Best Practices
+
+1. **Reuse client instances**: Create one client and reuse it throughout your application
+2. **Environment variables**: Store base URLs and tokens in environment variables
+3. **Error boundaries**: Wrap API calls in error handling blocks
+4. **Header management**: Set common headers once using `setHeaders()`
+
+## TypeScript Support
+
+The package includes full TypeScript type definitions. All methods and configurations are strongly typed.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss proposed changes.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
