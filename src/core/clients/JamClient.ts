@@ -106,14 +106,14 @@ export class Jam implements IJamClient {
    * @param {string} url - API endpoint URL
    * @param {any} [payload] - Request body (unused in GET)
    * @param {QueryParams} [queryParams] - URL query parameters
-   * @returns {Promise<void>} API response
+   * @returns {Promise<Response>} API response
    * @throws {HttpError} On request failure
    */
   async get(
     url: string,
     payload?: any,
     queryParams?: QueryParams
-  ): Promise<void> {
+  ): Promise<Response> {
     return await constructUrl(
       { endpoint: url, baseUrl: this.baseUrl, queryParams },
       payload,
@@ -127,14 +127,14 @@ export class Jam implements IJamClient {
    * @param {string} url - API endpoint URL
    * @param {any} [payload] - Request body
    * @param {QueryParams} [queryParams] - URL query parameters
-   * @returns {Promise<void>} API response
+   * @returns {Promise<Response>} API response
    * @throws {HttpError} On request failure
    */
   async post(
     url: string,
     payload?: any,
     queryParams?: QueryParams
-  ): Promise<void> {
+  ): Promise<Response> {
     return await constructUrl(
       { endpoint: url, baseUrl: this.baseUrl, queryParams },
       payload,
