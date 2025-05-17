@@ -144,8 +144,7 @@ client.[method](url, payload?, queryParams?): Promise<Response>
 
 **Returns:**
 
-- `Promise<Response>` (PUT, DELETE, PATCH)
-- `Promise<void>` (GET, POST)
+- `Promise<Response>` (GET, POST, PUT, DELETE, PATCH)
 
 **Throws:**
 

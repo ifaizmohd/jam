@@ -1,6 +1,6 @@
 {
   "name": "apijam",
-  "version": "1.0.01",
+  "version": "1.0.02",
   "description": "Javascript API manager",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
