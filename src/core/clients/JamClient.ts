@@ -15,11 +15,11 @@ import { constructUrl } from "../apiConstructor";
  * - Manages request headers and base URLs
  * - Provides HTTP method shortcuts with consistent interface
  * @example
- * const client = new JamClient('https://api.jam.com');
+ * const client = new Jam('https://api.jam.com');
  * client.setAccessToken('ey123...');
  * const data = await client.get('/tracks');
  */
-export class JamClient implements IJamClient {
+export class Jam implements IJamClient {
   private baseUrl?: string;
   private accessToken?: string;
   private headers?: Record<string, string>;
