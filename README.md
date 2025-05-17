@@ -14,12 +14,12 @@ JAM is build to make cross platform api requests from Browsers, NodeJs servers a
 
 ## Installation
 
-`npm install jam`
+`npm install apijam`
 
 ## Quick Start
 
 ```typescript
-import { Jam } from "@jam/api-client";
+import { Jam } from "apijam";
 
 // Initialize client
 const client = new Jam("https://api.jam.com/v2");
