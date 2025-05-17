@@ -5,8 +5,12 @@ export interface IJamClient {
   setBaseUrl(baseUrl: string): void;
   setHeaders(headers: Record<string, string>): void;
   setAccessToken(token: string): void;
-  get(url: string, payload?: any, queryParams?: QueryParams): Promise<void>;
-  post(url: string, payload?: any, queryParams?: QueryParams): Promise<void>;
+  get(url: string, payload?: any, queryParams?: QueryParams): Promise<Response>;
+  post(
+    url: string,
+    payload?: any,
+    queryParams?: QueryParams
+  ): Promise<Response>;
   put(url: string, payload: any, queryParams?: QueryParams): Promise<Response>;
   delete(
     url: string,
