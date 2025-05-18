@@ -1,6 +1,6 @@
 {
   "name": "apijam",
-  "version": "1.0.02",
+  "version": "1.0.03",
   "description": "Javascript API manager",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -64,8 +64,5 @@
   },
   "_moduleAliases": {
     "@core": "./dist/core"
-  },
-  "peerDependencies": {
-    "react": "^18.0.0"
   }
 }
