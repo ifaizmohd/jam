@@ -187,7 +187,7 @@ export class Jam implements IJamClient {
       { endpoint: url, baseUrl: this.baseUrl, queryParams },
       payload,
       { ...this.headers },
-      "PUT"
+      "DELETE"
     );
   }
 
